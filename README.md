@@ -54,8 +54,32 @@ PhytoHER2/
 │   └── run_biosimulant_docking.py # 3D DiffDock docking simulation via Biosimulant BioWorld
 ├── ui/
 │   └── app.py                     # Interactive Streamlit dashboard for real-time inference
+├── biomodule.py                   # Biosimulant runtime execution module (PhytoHER2Module)
+├── packages.txt                   # Linux system dependencies for Streamlit Cloud
 ├── requirements.txt               # Project dependencies
 └── README.md
+```
+
+---
+
+## 🧬 Biosimulant BioModule Integration
+
+`PhytoHER2` includes a plug-and-play **Biosimulant runtime hook** in `biomodule.py` (`PhytoHER2Module`):
+
+```python
+from biomodule import PhytoHER2Module
+
+# Initialize the module (loads data/her2_rf_model.pkl)
+module = PhytoHER2Module()
+
+# Execute inference on a 1024-bit Morgan fingerprint vector
+payload = module.execute({"fingerprint": fp_list})
+print(payload)
+# {
+#     "prediction_class": 1,
+#     "inhibition_probability": 0.82,
+#     "status": "COMPLETED"
+# }
 ```
 
 ---
