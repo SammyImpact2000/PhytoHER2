@@ -213,6 +213,22 @@ def main():
             except Exception as exc:
                 st.caption(f"Unable to render 2D image: {exc}")
 
+        st.write("---")
+        st.subheader("🧠 Explainable AI: Molecular Feature Importance")
+        st.write("This chart highlights the top 20 molecular fingerprint bits that drove the AI's prediction.")
+
+        # Extract feature importances from the Random Forest model
+        importances = model.feature_importances_
+        top_indices = np.argsort(importances)[::-1][:20]
+
+        # Format data for Streamlit's native bar chart
+        chart_data = pd.DataFrame(
+            {"Importance": importances[top_indices]}, 
+            index=[f"Bit {i}" for i in top_indices]
+        )
+
+        st.bar_chart(chart_data)
+
         # Assemble results for export
         results_df = pd.DataFrame(
             [
