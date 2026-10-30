@@ -11,6 +11,7 @@ from pathlib import Path
 
 import joblib
 import numpy as np
+import pandas as pd
 import streamlit as st
 from rdkit import Chem
 from rdkit.Chem import Draw, rdFingerprintGenerator
@@ -37,6 +38,12 @@ SAMPLE_COMPOUNDS = {
 # --------------------------------------------------------------------------- #
 # Cached Model Loader & Fingerprint Extractor
 # --------------------------------------------------------------------------- #
+@st.cache_data
+def convert_df(df: pd.DataFrame) -> bytes:
+    """Convert dataframe to utf-8 encoded CSV for download."""
+    return df.to_csv(index=False).encode("utf-8")
+
+
 @st.cache_resource
 def load_rf_model():
     """Load and cache the trained Random Forest model."""
@@ -205,6 +212,34 @@ def main():
                 st.image(mol_img, caption="Rendered 2D Molecular Structure", use_container_width=True)
             except Exception as exc:
                 st.caption(f"Unable to render 2D image: {exc}")
+
+        # Assemble results for export
+        results_df = pd.DataFrame(
+            [
+                {
+                    "smiles": user_smiles,
+                    "predicted_class": "Inhibitor" if pred_class == 1 else "Non-Inhibitor",
+                    "inhibition_probability_pct": round(prob_inhibitor, 2),
+                    "non_inhibition_probability_pct": round(prob_non_inhibitor, 2),
+                    "heavy_atoms": mol.GetNumHeavyAtoms(),
+                    "rings": mol.GetRingInfo().NumRings(),
+                    "active_fingerprint_bits": int(np.sum(fp_arr)),
+                }
+            ]
+        )
+
+        st.write("---")
+        st.subheader("📥 Export Data")
+
+        csv_data = convert_df(results_df)
+
+        st.download_button(
+            label="Download Screening Results (CSV)",
+            data=csv_data,
+            file_name="phytoher2_screening_results.csv",
+            mime="text/csv",
+            use_container_width=True,
+        )
 
     st.markdown("---")
     with st.expander("🔬 Scientific Methodology, Metrics & Validation"):
