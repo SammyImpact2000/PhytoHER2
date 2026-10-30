@@ -1,0 +1,2 @@
+chemical_name,smiles,pmid,binding_affinity_kcal_mol,diffdock_confidence,molecular_weight,logp,hbd,hba,key_pocket_contacts
+Lapatinib,CS(=O)(=O)CCNCC1=CC=C(O1)C2=CC3=C(C=C2)N=CN=C3NC4=CC(=C(C=C4)OCC5=CC(=CC=C5)F)Cl,FDA-Approved,-16.25,1.487,581.1,6.14,2,8,Met801 (Hinge Backbone NH); Lys753 (Catalytic Lysine Cation-Pi); Thr798 (Gatekeeper Hydrogen Bond); Leu726 (Hydrophobic Subpocket); Asp863 (DFG-motif Allosteric Region)

@@ -1,0 +1,18 @@
+# Virtual Environment
+.venv/
+venv/
+ENV/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Large downloaded transformer weights (>100MB GitHub limit)
+models/
+
+# OS and Editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
